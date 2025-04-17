@@ -19,7 +19,6 @@ import util.DBConnUtil;
 
 public class EnrollmentDAOImpl implements EnrollmentDAO {
 
-    // Set to track student-course pairs to avoid duplicate enrollments (stored as studentId + courseId pair)
     private Set<String> enrolledStudentCourses = new HashSet<>();
 
     @Override
@@ -88,7 +87,6 @@ public class EnrollmentDAOImpl implements EnrollmentDAO {
             throw new InvalidEnrollmentDataException("Enrollment data is invalid.");
         }
 
-        // Check if the student is already enrolled in the course (duplicate enrollment check)
         String studentCourseKey = enrollment.getStudent().getStudentId() + "-" + enrollment.getCourse().getCourseId();
         if (enrolledStudentCourses.contains(studentCourseKey)) {
             throw new DuplicateEnrollmentException("Student is already enrolled in the course.");
@@ -101,11 +99,10 @@ public class EnrollmentDAOImpl implements EnrollmentDAO {
 
             statement.setInt(1, enrollment.getStudent().getStudentId());
             statement.setInt(2, enrollment.getCourse().getCourseId());
-            statement.setDate(3, Date.valueOf(enrollment.getEnrollmentDate()));  // Date value must be in format yyyy-mm-dd
+            statement.setDate(3, Date.valueOf(enrollment.getEnrollmentDate()));  
 
             int rowsAffected = statement.executeUpdate();
             if (rowsAffected > 0) {
-                // Add the student-course pair to the set after successful enrollment
                 enrolledStudentCourses.add(studentCourseKey);
                 System.out.println("Enrollment added successfully.");
             } else {
