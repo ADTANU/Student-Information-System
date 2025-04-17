@@ -12,7 +12,6 @@ import java.util.Scanner;
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
 
-    // Assuming DAOs are implemented and ready to use
     private static final StudentDAO studentDAO = new StudentDAOImpl();
     private static final CourseDAO courseDAO = new CourseDAOImpl();
     private static final EnrollmentDAO enrollmentDAO = new EnrollmentDAOImpl();
@@ -25,7 +24,7 @@ public class Main {
         while (isRunning) {
             showMenu();
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine();
 
             try {
                 switch (choice) {
@@ -54,10 +53,10 @@ public class Main {
                         calculateCourseStatistics();
                         break;
                     case 9:
-                        viewAllStudents(); // New option
+                        viewAllStudents();
                         break;
                     case 10:
-                        viewAllCourses(); // New option
+                        viewAllCourses(); 
                         break;
                     case 11:
                         System.out.println("Exiting program...");
@@ -82,15 +81,15 @@ public class Main {
         System.out.println("6. Generate Enrollment Report");
         System.out.println("7. Generate Payment Report");
         System.out.println("8. Calculate Course Statistics");
-        System.out.println("9. View All Students"); // New option
-        System.out.println("10. View All Courses"); // New option
+        System.out.println("9. View All Students");
+        System.out.println("10. View All Courses");
         System.out.println("11. Exit");
         System.out.print("Enter your choice: ");
     }
 
     private static void viewAllStudents() {
         try {
-            List<Student> students = studentDAO.getAllStudents(); // Assuming a getAllStudents method in your StudentDAO
+            List<Student> students = studentDAO.getAllStudents();
             System.out.println("==== All Students ====");
             for (Student student : students) {
                 System.out.println("ID: " + student.getStudentId() +
@@ -105,7 +104,7 @@ public class Main {
 
     private static void viewAllCourses() {
         try {
-            List<Course> courses = courseDAO.getAllCourses(); // Assuming a getAllCourses method in your CourseDAO
+            List<Course> courses = courseDAO.getAllCourses(); 
             System.out.println("==== All Courses ====");
             for (Course course : courses) {
                 System.out.println("ID: " + course.getCourseId() +
@@ -163,22 +162,18 @@ public class Main {
             System.out.print("Enter Course ID: ");
             int courseId = scanner.nextInt();
 
-            // Check if student exists
             Student student = studentDAO.getStudent(studentId);
             if (student == null) {
                 throw new StudentNotFoundException("Student with ID " + studentId + " not found.");
             }
 
-            // Check if course exists
             Course course = courseDAO.getCourse(courseId);
             if (course == null) {
                 throw new CourseNotFoundException("Course with ID " + courseId + " not found.");
             }
 
-            // Format the current date as a String (yyyy-MM-dd format)
             String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date());
 
-            // Enroll the student
             Enrollment enrollment = new Enrollment(0, student, course, currentDate);
             enrollmentDAO.addEnrollment(enrollment);
             System.out.println("Student " + student.getFirstName() + " successfully enrolled in course: " + course.getCourseName());
@@ -195,7 +190,6 @@ public class Main {
         System.out.print("Enter Course ID: ");
         int courseId = scanner.nextInt();
 
-        // Retrieve teacher and course details
         Teacher teacher = teacherDAO.getTeacher(teacherId);
         Course course = courseDAO.getCourse(courseId);
 
@@ -213,7 +207,7 @@ public class Main {
         System.out.print("Enter Payment Amount: ");
         double amount = scanner.nextDouble();
         System.out.print("Enter Payment Date (YYYY-MM-DD): ");
-        String paymentDate = scanner.next();  // Dummy date format
+        String paymentDate = scanner.next();
 
         Student student = studentDAO.getStudent(studentId);
         if (student != null) {
