@@ -19,7 +19,6 @@ import java.util.List;
 public class StudentDAOImpl implements StudentDAO {
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-    // Utility method to handle common database connection check
     private boolean isConnectionValid(Connection connection) {
         try {
             if (connection == null || connection.isClosed()) {
@@ -34,7 +33,7 @@ public class StudentDAOImpl implements StudentDAO {
     @Override
     public Student getStudent(int studentId) throws StudentNotFoundException {
         Student student = null;
-        String sql = "SELECT * FROM students WHERE student_id = ?";  // Updated column name
+        String sql = "SELECT * FROM students WHERE student_id = ?";  
 
         try (Connection connection = DBConnUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -67,7 +66,7 @@ public class StudentDAOImpl implements StudentDAO {
 
     @Override
     public void enrollInCourse(int studentId, Course course) throws EnrollmentException {
-        String sql = "INSERT INTO enrollments (student_id, CourseID) VALUES (?, ?)";  // Updated column name
+        String sql = "INSERT INTO enrollments (student_id, CourseID) VALUES (?, ?)"; 
 
         try (Connection connection = DBConnUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -93,10 +92,10 @@ public class StudentDAOImpl implements StudentDAO {
     @Override
     public void updateStudentInfo(int studentId, String firstName, String lastName, String dateOfBirth, String email, String phoneNumber)
             throws UpdateStudentInfoException, InvalidDateFormatException {
-        String sql = "UPDATE students SET FirstName = ?, LastName = ?, DateOfBirth = ?, Email = ?, PhoneNumber = ? WHERE student_id = ?";  // Updated column name
+        String sql = "UPDATE students SET FirstName = ?, LastName = ?, DateOfBirth = ?, Email = ?, PhoneNumber = ? WHERE student_id = ?";
 
         try {
-            Date dob = new Date(dateFormat.parse(dateOfBirth).getTime()); // Parse the date string
+            Date dob = new Date(dateFormat.parse(dateOfBirth).getTime());
             try (Connection connection = DBConnUtil.getConnection();
                  PreparedStatement statement = connection.prepareStatement(sql)) {
 
@@ -128,10 +127,10 @@ public class StudentDAOImpl implements StudentDAO {
 
     @Override
     public void makePayment(int studentId, double amount, String paymentDate) throws PaymentException, InvalidDateFormatException {
-        String sql = "INSERT INTO payments (StudentID, Amount, PaymentDate) VALUES (?, ?, ?)";  // Changed column name to StudentID
+        String sql = "INSERT INTO payments (StudentID, Amount, PaymentDate) VALUES (?, ?, ?)"; 
 
         try {
-            Date paymentDateObj = new Date(dateFormat.parse(paymentDate).getTime()); // Parse the payment date
+            Date paymentDateObj = new Date(dateFormat.parse(paymentDate).getTime());
             try (Connection connection = DBConnUtil.getConnection();
                  PreparedStatement statement = connection.prepareStatement(sql)) {
 
@@ -178,7 +177,7 @@ public class StudentDAOImpl implements StudentDAO {
         List<Course> enrolledCourses = new ArrayList<>();
         String sql = "SELECT c.* FROM courses c " +
                      "JOIN enrollments e ON c.CourseID = e.CourseID " +
-                     "WHERE e.student_id = ?";  // Updated column name
+                     "WHERE e.student_id = ?";
 
         try (Connection connection = DBConnUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -213,7 +212,7 @@ public class StudentDAOImpl implements StudentDAO {
     @Override
     public List<Payment> getPaymentHistory(int studentId) throws StudentNotFoundException {
         List<Payment> paymentHistory = new ArrayList<>();
-        String sql = "SELECT * FROM payments WHERE student_id = ?";  // Updated column name
+        String sql = "SELECT * FROM payments WHERE student_id = ?"; 
 
         try (Connection connection = DBConnUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -276,23 +275,20 @@ public class StudentDAOImpl implements StudentDAO {
     public List<Student> getAllStudents() {
         List<Student> students = new ArrayList<>();
         
-        // Query to fetch all students
-        String query = "SELECT * FROM students"; // Ensure your table name is correct
+        String query = "SELECT * FROM students"; 
 
         try (Connection connection = DBConnUtil.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query);
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
-            // Iterate through the result set and create Student objects
             while (resultSet.next()) {
-                int studentId = resultSet.getInt("student_id"); // Adjust column names as per your DB schema
+                int studentId = resultSet.getInt("student_id");
                 String firstName = resultSet.getString("firstname");
                 String lastName = resultSet.getString("lastname");
                 Date dob = resultSet.getDate("DateOfBirth");
                 String email = resultSet.getString("email");
                 String phoneNumber = resultSet.getString("phonenumber");
 
-                // Create a Student object and add it to the list
                 Student student = new Student(studentId, firstName, lastName, dob, email, phoneNumber);
                 students.add(student);
             }
