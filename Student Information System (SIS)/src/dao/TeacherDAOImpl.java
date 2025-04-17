@@ -15,7 +15,6 @@ import util.DBConnUtil;
 
 public class TeacherDAOImpl implements TeacherDAO {
 
-    // Method to get Teacher from database
     @Override
     public Teacher getTeacher(int teacherId) throws TeacherNotFoundException {
         Teacher teacher = null;
@@ -43,10 +42,9 @@ public class TeacherDAOImpl implements TeacherDAO {
         return teacher;
     }
 
-    // Method to update teacher information in the database
     @Override
     public void updateTeacherInfo(int teacherId, String name, String email) throws InvalidNameFormatException, SQLException {
-        String[] nameParts = name.split(" ", 2); // Splitting into first and last name
+        String[] nameParts = name.split(" ", 2);
         if (nameParts.length != 2) {
             throw new InvalidNameFormatException("Invalid name format. Expected 'FirstName LastName'.");
         }
@@ -76,7 +74,6 @@ public class TeacherDAOImpl implements TeacherDAO {
         }
     }
 
-    // Method to display teacher info
     @Override
     public void displayTeacherInfo(int teacherId) throws TeacherNotFoundException {
         Teacher teacher = getTeacher(teacherId);
@@ -90,7 +87,6 @@ public class TeacherDAOImpl implements TeacherDAO {
         }
     }
 
-    // Method to get assigned courses for a teacher
     @Override
     public List<Course> getAssignedCourses(int teacherId) throws SQLException {
         List<Course> assignedCourses = new ArrayList<>();
@@ -120,7 +116,6 @@ public class TeacherDAOImpl implements TeacherDAO {
         return assignedCourses;
     }
 
-    // Method to add a teacher to the database
     @Override
     public void addTeacher(Teacher teacher) throws SQLException {
         String sql = "INSERT INTO teachers (TeacherID, FirstName, LastName, Email) VALUES (?, ?, ?, ?)";
@@ -143,7 +138,6 @@ public class TeacherDAOImpl implements TeacherDAO {
         }
     }
 
-    // Method to assign a course to a teacher
     @Override
     public void assignCourseToTeacher(int teacherId, Course course) throws SQLException {
         String sql = "INSERT INTO teacher_courses (TeacherID, course_id) VALUES (?, ?)";
