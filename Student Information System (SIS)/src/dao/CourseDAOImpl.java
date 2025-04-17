@@ -153,11 +153,9 @@ public class CourseDAOImpl implements CourseDAO {
                 String teacherFirstName = resultSet.getString("TeacherFirstName");
                 String teacherLastName = resultSet.getString("TeacherLastName");
 
-                // Create Student and Course objects based on fetched data
                 Student student = new Student(studentId, firstName, lastName, null, email, phoneNumber);
                 Course course = new Course(courseId, courseName, courseCode, teacherFirstName + " " + teacherLastName);
 
-                // Create Enrollment object and add it to the list
                 enrollments.add(new Enrollment(enrollmentId, student, course, enrollmentDate.toString()));
             }
         } catch (SQLException e) {
@@ -229,21 +227,20 @@ public class CourseDAOImpl implements CourseDAO {
     public List<Course> getAllCourses() {
         List<Course> courses = new ArrayList<>();
 
-        // Query to fetch all courses
-        String query = "SELECT * FROM courses"; // Ensure your table name is correct
+        String query = "SELECT * FROM courses";
 
         try (Connection connection = DBConnUtil.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query);
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
-            // Iterate through the result set and create Course objects
+           
             while (resultSet.next()) {
-                int courseId = resultSet.getInt("courseid"); // Adjust column names as per your DB schema
+                int courseId = resultSet.getInt("courseid"); 
                 String courseName = resultSet.getString("coursename");
                 String courseCode = resultSet.getString("coursecode");
                 String instructorName = resultSet.getString("instructorname");
 
-                // Create a Course object and add it to the list
+                
                 Course course = new Course(courseId, courseName, courseCode, instructorName);
                 courses.add(course);
             }
